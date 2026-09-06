@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AKIM DICE</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: white;
+    background: #080b12;
+    transition: background .4s ease;
+    overflow-x: hidden;
+}
+
+body.bg-dark {
+    background: radial-gradient(circle at top, #182033 0%, #080b12 60%);
+}
+
+body.bg-blue {
+    background: radial-gradient(circle at top, #123a69 0%, #080b12 65%);
+}
+
+body.bg-purple {
+    background: radial-gradient(circle at top, #42145d 0%, #080b12 65%);
+}
+
+body.bg-red {
+    background: radial-gradient(circle at top, #5d1515 0%, #080b12 65%);
+}
+
+body.bg-green {
+    background: radial-gradient(circle at top, #14552e 0%, #080b12 65%);
+}
+
+body.bg-yellow {
+    background: radial-gradient(circle at top, #5b4b0c 0%, #080b12 65%);
+}
+
+body.bg-orange {
+    background: radial-gradient(circle at top, #65300d 0%, #080b12 65%);
+}
+
+.container {
+    width: min(1050px, 94%);
+    margin: auto;
+    padding: 22px 0 50px;
+}
+
+/* HEADER */
+
+header {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.logo {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-shadow:
+        0 0 10px #00eaff,
+        0 0 25px #00eaff;
+}
+
+.subtitle {
+    margin-top: 6px;
+    color: #8191a5;
+    font-size: 13px;
+}
+
+/* PANEL */
+
+.panel {
+    background: rgba(15,21,32,.78);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.25),
+        inset 0 1px rgba(255,255,255,.03);
+    backdrop-filter: blur(12px);
+}
+
+.panel-title {
+    color: #71849c;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 13px;
+}
+
+/* SETTINGS */
+
+.settings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 13px;
+}
+
+.setting {
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 12px;
+    padding: 13px;
+}
+
+.setting label {
+    display: block;
+    font-size: 11px;
+    color: #8293a9;
+    margin-bottom: 7px;
+}
+
+select {
+    width: 100%;
+    background: #111827;
+    color: white;
+    border: 1px solid #29364a;
+    border-radius: 9px;
+    padding: 10px;
+    outline: none;
+}
+
+/* DICE */
+
+.dice-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    padding: 12px 0;
+}
+
+.dice-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    /*
+       Важно:
+       ряд не двигается.
+    */
+    width: 100%;
+    max-width: 560px;
+}
+
+/* КУБИКИ СДЕЛАНЫ МЕНЬШЕ */
+
+.dice {
+    flex: 0 0 68px;
+    width: 68px;
+    height: 68px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #505965;
+    border: 2px solid #69727e;
+
+    box-shadow: 0 7px 18px rgba(0,0,0,.35);
+
+    transition:
+        background .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.dice-placeholder::after {
+    content: "—";
+    color: #cbd1d8;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.dice-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 10px rgba(255,255,255,.8);
+}
+
+/* COLORS */
+
+.dice.red {
+    background: #ff3030;
+    border-color: #ff5c5c;
+    box-shadow: 0 0 20px rgba(255,48,48,.6);
+}
+
+.dice.yellow {
+    background: #ffd51f;
+    border-color: #ffe45e;
+    box-shadow: 0 0 20px rgba(255,213,31,.6);
+}
+
+.dice.orange {
+    background: #ff781f;
+    border-color: #ff9a5c;
+    box-shadow: 0 0 20px rgba(255,120,31,.6);
+}
+
+.dice.blue {
+    background: #248cff;
+    border-color: #65adff;
+    box-shadow: 0 0 20px rgba(36,140,255,.6);
+}
+
+.dice.purple {
+    background: #a83cff;
+    border-color: #c67aff;
+    box-shadow: 0 0 20px rgba(168,60,255,.6);
+}
+
+.dice.green {
+    background: #24d96b;
+    border-color: #65ed98;
+    box-shadow: 0 0 20px rgba(36,217,107,.6);
+}
+
+/* BUTTONS */
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+button {
+    border: none;
+    border-radius: 11px;
+    padding: 13px 21px;
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.roll-btn {
+    background: linear-gradient(135deg,#087eff,#00c6ff);
+    box-shadow: 0 0 18px rgba(0,198,255,.25);
+}
+
+.mega-btn {
+    background: linear-gradient(135deg,#8d20ff,#d43dff);
+    box-shadow: 0 0 22px rgba(180,50,255,.3);
+}
+
+.back-btn {
+    background: #263143;
+    border: 1px solid #3b4a60;
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: default;
+}
+
+/* STATS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+}
+
+.stat {
+    text-align: center;
+    background: rgba(255,255,255,.035);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.stat-number {
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.stat-name {
+    color: #71849c;
+    font-size: 10px;
+    margin-top: 4px;
+    text-transform: uppercase;
+}
+
+/* HISTORY */
+
+.history {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.history-empty {
+    text-align: center;
+    color: #65758a;
+    padding: 12px;
+    font-size: 13px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 11px;
+
+    padding: 9px 11px;
+}
+
+.history-number {
+    width: 34px;
+    color: #72849a;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.history-type {
+    width: 65px;
+    color: #aab6c5;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.history-dice {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+}
+
+.history-color {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.2);
+}
+
+.history-color.red { background:#ff3030; }
+.history-color.yellow { background:#ffd51f; }
+.history-color.orange { background:#ff781f; }
+.history-color.blue { background:#248cff; }
+.history-color.purple { background:#a83cff; }
+.history-color.green { background:#24d96b; }
+
+.history-time {
+    color: #5f7085;
+    font-size: 10px;
+}
+
+/* VERIFY */
+
+.verify {
+    display: flex;
+    gap: 9px;
+}
+
+.verify input {
+    flex: 1;
+    min-width: 0;
+    background: #111827;
+    border: 1px solid #29364a;
+    border-radius: 9px;
+    color: white;
+    padding: 11px;
+    outline: none;
+}
+
+.verify button {
+    background: #1d2939;
+}
+
+/* SCREEN */
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* MEGA SCREEN */
+
+.mega-screen {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mega-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.mega-title h2 {
+    font-size: 29px;
+    text-shadow:
+        0 0 10px #b42fff,
+        0 0 25px #b42fff;
+}
+
+.mega-title p {
+    color: #8191a5;
+    margin-top: 7px;
+    font-size: 12px;
+}
+
+.mega-dice-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    padding: 10px 0 25px;
+}
+
+.mega-dice-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 650px;
+}
+
+.mega-dice {
+    flex: 0 0 68px;
+    width: 68px;
+    height: 68px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #464e59;
+    border: 2px solid #68717d;
+
+    color: #d2d7dc;
+    font-size: 29px;
+    font-weight: 900;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.35);
+
+    transition:
+        background .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+.mega-dice.red {
+    background:#ff3030;
+    border-color:#ff5c5c;
+    box-shadow:0 0 23px rgba(255,48,48,.65);
+}
+
+.mega-dice.yellow {
+    background:#ffd51f;
+    border-color:#ffe45e;
+    box-shadow:0 0 23px rgba(255,213,31,.65);
+}
+
+.mega-dice.orange {
+    background:#ff781f;
+    border-color:#ff9a5c;
+    box-shadow:0 0 23px rgba(255,120,31,.65);
+}
+
+.mega-dice.blue {
+    background:#248cff;
+    border-color:#65adff;
+    box-shadow:0 0 23px rgba(36,140,255,.65);
+}
+
+.mega-dice.purple {
+    background:#a83cff;
+    border-color:#c67aff;
+    box-shadow:0 0 23px rgba(168,60,255,.65);
+}
+
+.mega-dice.green {
+    background:#24d96b;
+    border-color:#65ed98;
+    box-shadow:0 0 23px rgba(36,217,107,.65);
+}
+
+.mega-status {
+    text-align: center;
+    color: #91a1b5;
+    min-height: 22px;
+    margin-bottom: 18px;
+}
+
+/* MOBILE */
+
+@media (max-width:700px) {
+
+    .container {
+        width: 95%;
+        padding-top: 17px;
+    }
+
+    .logo {
+        font-size: 31px;
+    }
+
+    .settings {
+        grid-template-columns: 1fr;
+    }
+
+    .dice-row,
+    .mega-dice-row {
+        gap: 7px;
+    }
+
+    .dice {
+        flex-basis: 58px;
+        width: 58px;
+        height: 58px;
+        border-radius: 12px;
+    }
+
+    .dice-dot {
+        width: 13px;
+        height: 13px;
+    }
+
+    .dice-placeholder::after {
+        font-size: 24px;
+    }
+
+    .mega-dice {
+        flex-basis: 58px;
+        width: 58px;
+        height: 58px;
+        border-radius: 12px;
+        font-size: 25px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(3,1fr);
+    }
+
+    .history-item {
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .history-number {
+        width: 25px;
+    }
+
+    .history-type {
+        width: 48px;
+        font-size: 9px;
+    }
+
+    .history-time {
+        display: none;
+    }
+
+    .verify {
+        flex-direction: column;
+    }
+
+    .verify button {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body class="bg-dark">
+
+<div class="container">
+
+<!-- ================================= -->
+<!-- ПЕРВЫЙ ЭКРАН -->
+<!-- ================================= -->
+
+<section id="mainScreen" class="screen active">
+
+<header>
+    <div class="logo">AKIM DICE</div>
+    <div class="subtitle">NEON COLOR DICE</div>
+</header>
+
+
+<!-- НАСТРОЙКИ -->
+
+<div class="panel">
+
+    <div class="panel-title">Настройки</div>
+
+    <div class="settings">
+
+        <div class="setting">
+            <label>Количество кубиков</label>
+
+            <select id="diceCount">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+        </div>
+
+
+        <div class="setting">
+            <label>Режим</label>
+
+            <select id="rollMode">
+                <option value="random">
+                    Random Color
+                </option>
+
+                <option value="same">
+                    Same Color
+                </option>
+            </select>
+        </div>
+
+
+        <div class="setting">
+            <label>Фон</label>
+
+            <select id="background">
+
+                <option value="dark">
+                    Dark
+                </option>
+
+                <option value="blue">
+                    Blue
+                </option>
+
+                <option value="purple">
+                    Purple
+                </option>
+
+                <option value="red">
+                    Red
+                </option>
+
+                <option value="green">
+                    Green
+                </option>
+
+                <option value="yellow">
+                    Yellow
+                </option>
+
+                <option value="orange">
+                    Orange
+                </option>
+
+            </select>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- КУБИКИ -->
+
+<div class="panel">
+
+    <div class="panel-title">
+        Кубики
+    </div>
+
+    <div class="dice-area">
+        <div id="diceRow" class="dice-row"></div>
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            id="rollButton"
+            class="roll-btn"
+            onclick="rollDice()">
+
+            🎲 БРОСИТЬ
+
+        </button>
+
+
+        <button
+            id="megaButton"
+            class="mega-btn"
+            onclick="openMegaScreen()">
+
+            ⚡ МЕГА БРОСОК
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- СТАТИСТИКА -->
+
+<div class="panel">
+
+    <div class="panel-title">
+        Статистика
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div
+                id="score"
+                class="stat-number">
+                0
+            </div>
+
+            <div class="stat-name">
+                Score
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                id="streak"
+                class="stat-number">
+                0
+            </div>
+
+            <div class="stat-name">
+                Streak
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                id="rolls"
+                class="stat-number">
+                0
+            </div>
+
+            <div class="stat-name">
+                Rolls
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- НОВАЯ ИСТОРИЯ -->
+
+<div class="panel">
+
+    <div class="panel-title">
+        История бросков
+    </div>
+
+    <div
+        id="history"
+        class="history">
+
+        <div class="history-empty">
+            Пока бросков нет
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- VERIFY -->
+
+<div class="panel">
+
+    <div class="panel-title">
+        Verify Game ID
+    </div>
+
+    <div class="verify">
+
+        <input
+            id="gameId"
+            type="text"
+            placeholder="Введите Game ID">
+
+        <button onclick="verifyGame()">
+            ПРОВЕРИТЬ
+        </button>
+
+    </div>
+
+    <div
+        id="verifyResult"
+        style="
+            margin-top:9px;
+            color:#8191a5;
+            font-size:12px;
+        ">
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================================= -->
+<!-- ВТОРОЙ ЭКРАН -->
+<!-- ================================= -->
+
+<section
+    id="megaScreen"
+    class="screen mega-screen">
+
+    <div class="mega-title">
+
+        <h2>
+            ⚡ МЕГА БРОСОК
+        </h2>
+
+        <p>
+            Цвета открываются по одному
+        </p>
+
+    </div>
+
+
+    <div class="mega-dice-area">
+
+        <div
+            id="megaDiceRow"
+            class="mega-dice-row">
+        </div>
+
+    </div>
+
+
+    <div
+        id="megaStatus"
+        class="mega-status">
+
+        Подготовка...
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            id="megaBackButton"
+            class="back-btn"
+            onclick="closeMegaScreen()">
+
+            ← НАЗАД
+
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   ДАННЫЕ
+========================================== */
+
+const colors = [
+    "red",
+    "yellow",
+    "orange",
+    "blue",
+    "purple",
+    "green"
+];
+
+let diceCount = 4;
+let rollMode = "random";
+
+let score = 0;
+let streak = 0;
+let rolls = 0;
+
+let history = [];
+
+let isRolling = false;
+let megaRunning = false;
+
+/*
+   Последний результат.
+   Он НЕ сбрасывается после Mega.
+*/
+let currentResult = [];
+
+
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const diceRow =
+    document.getElementById("diceRow");
+
+const megaDiceRow =
+    document.getElementById("megaDiceRow");
+
+const diceCountSelect =
+    document.getElementById("diceCount");
+
+const rollModeSelect =
+    document.getElementById("rollMode");
+
+const backgroundSelect =
+    document.getElementById("background");
+
+
+/* ==========================================
+   СОЗДАНИЕ КУБИКОВ
+========================================== */
+
+function createDice() {
+
+    diceRow.innerHTML = "";
+
+    for (let i = 0; i < diceCount; i++) {
+
+        const dice =
+            document.createElement("div");
+
+        /*
+           Если уже есть результат,
+           показываем его.
+
+           Если результата нет —
+           серый кубик.
+        */
+
+        if (currentResult[i]) {
+
+            setDiceColor(
+                dice,
+                currentResult[i]
+            );
+
+        } else {
+
+            dice.className =
+                "dice dice-placeholder";
+        }
+
+        diceRow.appendChild(dice);
+    }
+}
+
+
+/* ==========================================
+   RANDOM COLOR
+========================================== */
+
+function getRandomColor() {
+
+    return colors[
+        Math.floor(
+            Math.random() * colors.length
+        )
+    ];
+}
+
+
+/* ==========================================
+   РЕЗУЛЬТАТ БРОСКА
+========================================== */
+
+function getRollColors() {
+
+    const result = [];
+
+    if (rollMode === "same") {
+
+        const color =
+            getRandomColor();
+
+        for (
+            let i = 0;
+            i < diceCount;
+            i++
+        ) {
+            result.push(color);
+        }
+
+    } else {
+
+        for (
+            let i = 0;
+            i < diceCount;
+            i++
+        ) {
+            result.push(
+                getRandomColor()
+            );
+        }
+    }
+
+    return result;
+}
+
+
+/* ==========================================
+   УСТАНОВИТЬ ЦВЕТ
+========================================== */
+
+function setDiceColor(
+    dice,
+    color
+) {
+
+    dice.className =
+        "dice " + color;
+
+    dice.innerHTML =
+        '<div class="dice-dot"></div>';
+}
+
+
+/* ==========================================
+   ОБЫЧНЫЙ БРОСОК
+========================================== */
+
+function rollDice() {
+
+    if (
+        isRolling ||
+        megaRunning
+    ) {
+        return;
+    }
+
+    isRolling = true;
+
+    const result =
+        getRollColors();
+
+    currentResult =
+        [...result];
+
+    const diceElements =
+        Array.from(
+            diceRow.children
+        );
+
+
+    /*
+       Кубики остаются абсолютно
+       неподвижными.
+
+       Меняется только цвет.
+    */
+
+    diceElements.forEach(
+        (dice, index) => {
+
+            setTimeout(() => {
+
+                setDiceColor(
+                    dice,
+                    result[index]
+                );
+
+            }, index * 90);
+
+        }
+    );
+
+
+    setTimeout(() => {
+
+        finishRoll(
+            result,
+            "NORMAL"
+        );
+
+        isRolling = false;
+
+    }, diceCount * 90 + 150);
+}
+
+
+/* ==========================================
+   ЗАВЕРШЕНИЕ
+========================================== */
+
+function finishRoll(
+    result,
+    type
+) {
+
+    rolls++;
+
+    score += result.length;
+
+    streak++;
+
+    updateStats();
+
+    addHistory(
+        result,
+        type
+    );
+}
+
+
+/* ==========================================
+   СТАТИСТИКА
+========================================== */
+
+function updateStats() {
+
+    document.getElementById(
+        "score"
+    ).textContent = score;
+
+    document.getElementById(
+        "streak"
+    ).textContent = streak;
+
+    document.getElementById(
+        "rolls"
+    ).textContent = rolls;
+}
+
+
+/* ==========================================
+   НОВАЯ ИСТОРИЯ
+========================================== */
+
+function addHistory(
+    result,
+    type
+) {
+
+    const now =
+        new Date();
+
+    const time =
+        now.toLocaleTimeString(
+            "ru-RU",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+
+    history.unshift({
+
+        number: rolls,
+
+        type: type,
+
+        colors: [...result],
+
+        time: time
+
+    });
+
+
+    /*
+       Храним последние 15 бросков.
+    */
+
+    if (history.length > 15) {
+        history.pop();
+    }
+
+
+    renderHistory();
+}
+
+
+/* ==========================================
+   ОТОБРАЖЕНИЕ ИСТОРИИ
+========================================== */
+
+function renderHistory() {
+
+    const historyElement =
+        document.getElementById(
+            "history"
+        );
+
+    historyElement.innerHTML = "";
+
+
+    if (history.length === 0) {
+
+        historyElement.innerHTML =
+            '<div class="history-empty">' +
+            'Пока бросков нет' +
+            '</div>';
+
+        return;
+    }
+
+
+    history.forEach(item => {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "history-item";
+
+
+        const number =
+            document.createElement("div");
+
+        number.className =
+            "history-number";
+
+        number.textContent =
+            "#" + item.number;
+
+
+        const type =
+            document.createElement("div");
+
+        type.className =
+            "history-type";
+
+        type.textContent =
+            item.type === "MEGA"
+                ? "⚡ MEGA"
+                : "🎲 БРОСОК";
+
+
+        const dice =
+            document.createElement("div");
+
+        dice.className =
+            "history-dice";
+
+
+        item.colors.forEach(color => {
+
+            const colorElement =
+                document.createElement("div");
+
+            colorElement.className =
+                "history-color " + color;
+
+            colorElement.title =
+                color;
+
+            dice.appendChild(
+                colorElement
+            );
+
+        });
+
+
+        const time =
+            document.createElement("div");
+
+        time.className =
+            "history-time";
+
+        time.textContent =
+            item.time;
+
+
+        row.appendChild(number);
+        row.appendChild(type);
+        row.appendChild(dice);
+        row.appendChild(time);
+
+        historyElement.appendChild(row);
+
+    });
+}
+
+
+/* ==========================================
+   ОТКРЫТЬ MEGA
+========================================== */
+
+function openMegaScreen() {
+
+    if (
+        megaRunning ||
+        isRolling
+    ) {
+        return;
+    }
+
+
+    document.getElementById(
+        "mainScreen"
+    ).classList.remove(
+        "active"
+    );
+
+
+    document.getElementById(
+        "megaScreen"
+    ).classList.add(
+        "active"
+    );
+
+
+    startMegaRoll();
+}
+
+
+/* ==========================================
+   СЕРЫЕ ПРОЧЕРКИ
+========================================== */
+
+function createMegaPlaceholders() {
+
+    megaDiceRow.innerHTML = "";
+
+    for (
+        let i = 0;
+        i < diceCount;
+        i++
+    ) {
+
+        const dice =
+            document.createElement("div");
+
+        dice.className =
+            "mega-dice";
+
+        dice.textContent =
+            "—";
+
+        megaDiceRow.appendChild(
+            dice
+        );
+    }
+}
+
+
+/* ==========================================
+   MEGA
+========================================== */
+
+function startMegaRoll() {
+
+    megaRunning = true;
+
+    createMegaPlaceholders();
+
+
+    const status =
+        document.getElementById(
+            "megaStatus"
+        );
+
+    status.textContent =
+        "Цвета определяются...";
+
+
+    const result =
+        getRollColors();
+
+
+    /*
+       Сохраняем результат сразу,
+       чтобы после Mega он остался
+       на первом экране.
+    */
+
+    currentResult =
+        [...result];
+
+
+    const diceElements =
+        Array.from(
+            megaDiceRow.children
+        );
+
+
+    /*
+       Каждый цвет открывается
+       примерно раз в 700 мс.
+
+       Никаких движений.
+    */
+
+    diceElements.forEach(
+        (dice, index) => {
+
+            setTimeout(() => {
+
+                dice.className =
+                    "mega-dice " +
+                    result[index];
+
+                dice.textContent = "";
+
+            }, 700 * (index + 1));
+
+        }
+    );
+
+
+    const finishTime =
+        700 * diceCount + 500;
+
+
+    setTimeout(() => {
+
+        finishRoll(
+            result,
+            "MEGA"
+        );
+
+
+        status.textContent =
+            "МЕГА БРОСОК завершён";
+
+
+        megaRunning = false;
+
+
+        /*
+           После завершения обновляем
+           первый экран.
+
+           Именно здесь цвета Mega
+           закрепляются на обычных
+           кубиках.
+        */
+
+        createDice();
+
+    }, finishTime);
+}
+
+
+/* ==========================================
+   НАЗАД
+========================================== */
+
+function closeMegaScreen() {
+
+    /*
+       Во время Mega нельзя уйти,
+       чтобы не оборвать результат.
+    */
+
+    if (megaRunning) {
+        return;
+    }
+
+
+    document.getElementById(
+        "megaScreen"
+    ).classList.remove(
+        "active"
+    );
+
+
+    document.getElementById(
+        "mainScreen"
+    ).classList.add(
+        "active"
+    );
+
+
+    /*
+       Показываем последний результат.
+    */
+
+    createDice();
+}
+
+
+/* ==========================================
+   КОЛИЧЕСТВО КУБИКОВ
+========================================== */
+
+diceCountSelect.addEventListener(
+    "change",
+    function() {
+
+        diceCount =
+            Number(this.value);
+
+
+        /*
+           Если количество изменилось,
+           старый результат больше
+           не подходит.
+        */
+
+        currentResult = [];
+
+        createDice();
+    }
+);
+
+
+/* ==========================================
+   РЕЖИМ
+========================================== */
+
+rollModeSelect.addEventListener(
+    "change",
+    function() {
+
+        rollMode =
+            this.value;
+    }
+);
+
+
+/* ==========================================
+   ФОН
+========================================== */
+
+backgroundSelect.addEventListener(
+    "change",
+    function() {
+
+        setBackground(
+            this.value
+        );
+
+        localStorage.setItem(
+            "akimDiceBackground",
+            this.value
+        );
+    }
+);
+
+
+function setBackground(bg) {
+
+    document.body.className =
+        "bg-" + bg;
+}
+
+
+/* ==========================================
+   GAME ID
+========================================== */
+
+function verifyGame() {
+
+    const input =
+        document.getElementById(
+            "gameId"
+        );
+
+    const result =
+        document.getElementById(
+            "verifyResult"
+        );
+
+    const id =
+        input.value.trim();
+
+
+    if (!id) {
+
+        result.textContent =
+            "Введите Game ID.";
+
+        result.style.color =
+            "#ff6b6b";
+
+        return;
+    }
+
+
+    result.textContent =
+        "Game ID принят.";
+
+    result.style.color =
+        "#55e889";
+}
+
+
+/* ==========================================
+   ЗАГРУЗКА
+========================================== */
+
+function loadSettings() {
+
+    const savedBackground =
+        localStorage.getItem(
+            "akimDiceBackground"
+        );
+
+
+    if (savedBackground) {
+
+        backgroundSelect.value =
+            savedBackground;
+
+        setBackground(
+            savedBackground
+        );
+
+    } else {
+
+        setBackground("dark");
+    }
+}
+
+
+/* ==========================================
+   START
+========================================== */
+
+loadSettings();
+
+createDice();
+
+updateStats();
+
+renderHistory();
+
+</script>
+
+</body>
+</html>
